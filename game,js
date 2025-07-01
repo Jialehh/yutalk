@@ -1,0 +1,318 @@
+document.addEventListener('DOMContentLoaded', () => {
+    // --- CONSTANTS AND CONFIG (Mirrors server) ---
+    const TOWER_INFO = {
+        spice: { cost: 4 },
+        bomb: { cost: 10 },
+        producer: { cost: 2 },
+        cherryBomb: { cost: 20 },
+        shield: { cost: 6 },
+    };
+    const CELL_SIZE = 95;
+    const GRID_ROWS = 6;
+    const GRID_COLS = 12;
+    const PROTECTED_COLUMN = 0;
+
+    // --- DOM ELEMENTS ---
+    const dom = {
+        gameArea: document.getElementById('game-area'),
+        gridContainer: document.getElementById('grid-container'),
+        vegetableCount: document.getElementById('vegetable-count'),
+        healthCount: document.getElementById('health-count'),
+        healthFill: document.getElementById('health-fill'),
+        towerOptions: document.querySelectorAll('.tower-option'),
+        startBtn: document.getElementById('start-btn'),
+        restartBtn: document.getElementById('restart-btn'),
+        playAgainBtn: document.getElementById('play-again-btn'),
+        gameOverScreen: document.getElementById('game-over'),
+        difficultyProgressFill: document.getElementById('difficulty-progress-fill'),
+        playerBooster: document.getElementById('player-booster'),
+        boostIndicator: document.getElementById('boost-indicator'),
+    };
+
+    // --- CLIENT-SIDE STATE ---
+    let selectedTower = null;
+    let gameLoopInterval = null;
+
+    // --- INITIALIZATION ---
+    function initializeGrid() {
+        dom.gridContainer.innerHTML = '';
+        dom.gridContainer.style.width = `${GRID_COLS * CELL_SIZE}px`;
+        for (let r = 0; r < GRID_ROWS; r++) {
+            const rowEl = document.createElement('div');
+            rowEl.className = 'grid';
+            for (let c = 0; c < GRID_COLS; c++) {
+                const cell = document.createElement('div');
+                cell.className = 'cell';
+                cell.dataset.row = r;
+                cell.dataset.col = c;
+                
+                if (c === PROTECTED_COLUMN) {
+                    cell.classList.add('protected-cell');
+                    const protectedGirl = document.createElement('div');
+                    protectedGirl.className = 'protected-girl';
+                    cell.appendChild(protectedGirl);
+                }
+                
+                cell.addEventListener('click', () => handleCellClick(r, c));
+                rowEl.appendChild(cell);
+            }
+            dom.gridContainer.appendChild(rowEl);
+        }
+    }
+
+    // --- COMMUNICATION WITH SERVER ---
+    async function sendAction(action, data = {}) {
+        const formData = new FormData();
+        formData.append('action', action);
+        for (const key in data) {
+            formData.append(key, data[key]);
+        }
+        
+        try {
+            const response = await fetch('api.php', {
+                method: 'POST',
+                body: formData
+            });
+            return await response.json();
+        } catch (error) {
+            console.error('Error communicating with server:', error);
+        }
+    }
+    
+    // --- GAME FLOW ---
+    function startGame() {
+        dom.startBtn.disabled = true;
+        sendAction('start_game').then(() => {
+            gameLoopInterval = setInterval(getGameState, 100); // Poll server 10 times/sec
+            document.addEventListener('keydown', handlePlayerInput);
+            dom.boostIndicator.style.display = 'block';
+        });
+    }
+
+    function getGameState() {
+        sendAction('get_state').then(state => {
+            if (state) {
+                render(state);
+            }
+        });
+    }
+
+    // --- INPUT HANDLERS ---
+    dom.startBtn.addEventListener('click', startGame);
+    dom.towerOptions.forEach(opt => {
+        opt.addEventListener('click', () => {
+            const type = opt.dataset.towerType;
+            selectedTower = (selectedTower === type) ? null : type;
+            updateTowerSelectionUI();
+        });
+    });
+
+    function handleCellClick(row, col) {
+        if (!selectedTower) return;
+        sendAction('place_tower', { type: selectedTower, row, col }).then(state => {
+            if (state) render(state);
+        });
+        selectedTower = null;
+        updateTowerSelectionUI();
+    }
+    
+    function handlePlayerInput(e) {
+        if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+            const direction = e.key === 'ArrowLeft' ? 'left' : 'right';
+            sendAction('move_booster', { direction });
+        }
+    }
+
+    // --- RENDER FUNCTION (The heart of the new client) ---
+    function render(state) {
+        // Update UI
+        dom.vegetableCount.textContent = state.vegetables;
+        dom.healthCount.textContent = state.health;
+        dom.healthFill.style.width = `${state.health}%`;
+
+        if (state.gameOver) {
+            clearInterval(gameLoopInterval);
+            dom.gameOverScreen.classList.add('show');
+            return;
+        }
+
+        // Update difficulty progress
+        const timeToNext = state.nextDifficultyIncreaseTime - (state.lastUpdate);
+        const progress = 100 - (timeToNext / state.difficultyIncreaseInterval * 100);
+        dom.difficultyProgressFill.style.width = `${Math.min(100, Math.max(0, progress))}%`;
+        
+        // Update tower shop UI (cooldowns, funds)
+        const now = state.lastUpdate;
+        dom.towerOptions.forEach(opt => {
+            const type = opt.dataset.towerType;
+            const cooldownEnd = state.towerCooldowns[type];
+            const cooldownInfo = TOWER_INFO[type];
+
+            opt.classList.toggle('insufficient-funds', state.vegetables < cooldownInfo.cost);
+            
+            const progressEl = opt.querySelector('.cooldown-progress');
+            if (now < cooldownEnd) {
+                opt.classList.add('on-cooldown');
+                const duration = cooldownEnd - (cooldownEnd - TOWER_INFO[type].cooldown); // Approximation
+                const remaining = cooldownEnd - now;
+                progressEl.style.width = `${(remaining / duration) * 100}%`;
+            } else {
+                opt.classList.remove('on-cooldown');
+                progressEl.style.width = `0%`;
+            }
+        });
+
+        // Reconcile Towers
+        const serverTowers = Object.values(state.towers);
+        const clientTowers = document.querySelectorAll('.tower');
+        let towerIdsOnClient = new Set();
+        
+        clientTowers.forEach(tEl => {
+            const id = tEl.dataset.id;
+            const towerData = serverTowers.find(t => t.id === id);
+            if (towerData) {
+                // Tower exists, update it (e.g., shielded status)
+                tEl.classList.toggle('shielded', !!towerData.shielded);
+                towerIdsOnClient.add(id);
+            } else {
+                // Tower was removed on server, remove from client
+                tEl.remove();
+            }
+        });
+        
+        serverTowers.forEach(towerData => {
+            if (!towerIdsOnClient.has(towerData.id)) {
+                // Tower is new, create it
+                const cell = dom.gridContainer.children[towerData.row]?.querySelector(`[data-col='${towerData.col}']`);
+                if (cell) {
+                    const towerEl = document.createElement('div');
+                    towerEl.className = `tower ${towerData.type}-tower`;
+                    towerEl.dataset.id = towerData.id;
+                    cell.appendChild(towerEl);
+                }
+            }
+        });
+
+
+        // Reconcile Enemies
+        const serverEnemies = Object.values(state.enemies);
+        const clientEnemies = document.querySelectorAll('.enemy');
+        let enemyIdsOnClient = new Set();
+
+        clientEnemies.forEach(eEl => {
+            const id = eEl.dataset.id;
+            const enemyData = serverEnemies.find(e => e.id === id);
+            if (enemyData) {
+                // Enemy exists, update position and health
+                eEl.style.left = `${enemyData.position * CELL_SIZE}px`;
+                const healthFill = eEl.querySelector('.health-fill');
+                if (healthFill) {
+                    healthFill.style.width = `${(enemyData.health / enemyData.maxHealth) * 100}%`;
+                }
+                enemyIdsOnClient.add(id);
+            } else {
+                // Enemy was removed, remove from client
+                eEl.remove();
+            }
+        });
+
+        serverEnemies.forEach(enemyData => {
+            if (!enemyIdsOnClient.has(enemyData.id)) {
+                // Enemy is new, create it
+                createEnemyElement(enemyData);
+            }
+        });
+
+        // Handle one-time events
+        state.events.forEach(event => {
+            if (event.type === 'explosion') createExplosionAnimation(event.row, event.col);
+            if (event.type === 'message') showGameMessage(event.text);
+            if (event.type === 'bomber_attack') triggerBomberWarning(event.targetRow, event.targetCol);
+            // More events like 'attack' animation can be handled here
+        });
+
+        // Update Booster position
+        updateBoosterPosition(state.boosterColumn);
+    }
+    
+    function createEnemyElement(enemy) {
+        const enemyEl = document.createElement('div');
+        enemyEl.className = `enemy ${enemy.type}-enemy`;
+        enemyEl.id = `enemy-${enemy.id}`;
+        enemyEl.dataset.id = enemy.id;
+        
+        const healthBar = document.createElement('div');
+        healthBar.className = 'health-bar';
+        const healthFillEl = document.createElement('div');
+        healthFillEl.className = 'health-fill';
+        healthBar.appendChild(healthFillEl);
+        enemyEl.appendChild(healthBar);
+        
+        dom.gridContainer.children[enemy.row]?.appendChild(enemyEl);
+        if (enemyEl.parentElement) enemyEl.style.left = `${enemy.position * CELL_SIZE}px`;
+    }
+
+    function createExplosionAnimation(row, col) {
+        const explosionEl = document.createElement('div');
+        explosionEl.className = 'explosion-animation';
+        explosionEl.style.left = `${col * CELL_SIZE + CELL_SIZE / 2}px`;
+        explosionEl.style.top = `${row * CELL_SIZE + CELL_SIZE / 2}px`;
+        dom.gridContainer.appendChild(explosionEl);
+        setTimeout(() => explosionEl.remove(), 500);
+    }
+    
+    function triggerBomberWarning(targetRow, targetCol) {
+        const targetCells = [];
+        for (let r = 0; r < 2; r++) {
+            for (let c = 0; c < 2; c++) {
+                const cell = dom.gridContainer.children[targetRow + r]?.querySelector(`[data-col='${targetCol + c}']`);
+                if (cell) targetCells.push(cell);
+            }
+        }
+        targetCells.forEach(cell => cell.classList.add('bomb-warning'));
+        setTimeout(() => {
+             targetCells.forEach(cell => cell.classList.remove('bomb-warning'));
+             // The explosion itself will be triggered by another event in a subsequent state update
+        }, 2000);
+    }
+
+    function showGameMessage(msg) {
+        const messageEl = document.createElement('div');
+        messageEl.className = 'game-message';
+        messageEl.textContent = msg;
+        dom.gameArea.appendChild(messageEl);
+        setTimeout(() => messageEl.classList.add('show'), 10);
+        setTimeout(() => {
+            messageEl.classList.remove('show');
+            setTimeout(() => messageEl.remove(), 500);
+        }, 2800);
+    }
+
+    function updateTowerSelectionUI() {
+        dom.towerOptions.forEach(opt => {
+            opt.classList.toggle('selected', opt.dataset.towerType === selectedTower);
+        });
+    }
+
+    function updateBoosterPosition(boosterColumn) {
+        const gridRect = dom.gridContainer.getBoundingClientRect();
+        const gameAreaRect = dom.gameArea.getBoundingClientRect();
+        const gridOffsetX = gridRect.left - gameAreaRect.left;
+        
+        const boosterX = gridOffsetX + (boosterColumn * CELL_SIZE) + (CELL_SIZE / 2) - (dom.playerBooster.offsetWidth / 2);
+        const boosterY = gridRect.top - gameAreaRect.top + gridRect.height + 10;
+
+        const indicatorX = gridOffsetX + (boosterColumn * CELL_SIZE) + (CELL_SIZE / 2) - (dom.boostIndicator.offsetWidth / 2);
+        const indicatorY = gridRect.top - gameAreaRect.top;
+        
+        dom.playerBooster.style.left = `${boosterX}px`;
+        dom.playerBooster.style.top = `${boosterY}px`;
+        dom.boostIndicator.style.left = `${indicatorX}px`;
+        dom.boostIndicator.style.top = `${indicatorY}px`;
+        dom.boostIndicator.style.height = `${gridRect.height}px`;
+    }
+
+    // --- Start the App ---
+    initializeGrid();
+    getGameState(); // Get initial state on page load
+});

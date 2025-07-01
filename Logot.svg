@@ -1,0 +1,12 @@
+<svg width="70.000000" height="59.470562" viewBox="0 0 70 59.4706" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<desc>
+			Created with Pixso.
+	</desc>
+	<defs>
+		<radialGradient gradientTransform="translate(71.5 23.5) rotate(74.1482) scale(42.1011 60.9201)" cx="0.000000" cy="0.000000" r="1.000000" id="paint_angular_92_156_0" gradientUnits="userSpaceOnUse">
+			<stop stop-color="#FFFFFF"/>
+			<stop offset="1.000000" stop-color="#FFFFFF" stop-opacity="0.356863"/>
+		</radialGradient>
+	</defs>
+	<path id="合并" d="M24 0L46 0C47.8572 0 48.7856 0 49.5696 0.0560532C60.4824 0.836555 69.1633 9.51765 69.9438 20.4305C70 21.2143 70 22.1428 70 24C70 25.8572 70 26.7857 69.9438 27.5695C69.1633 38.4824 60.4824 47.1634 49.5696 47.9439C48.7856 48 47.8572 48 46 48L38.2058 48C37.9094 48.5696 37.4668 49.0801 36.8779 49.4733L22.9351 58.7847C19.9709 60.7643 16.0933 58.1708 16.791 54.6753L18.1897 47.6687C8.34937 45.9461 0.782227 37.724 0.0561523 27.5695C0 26.7857 0 25.8572 0 24C0 22.1428 0 21.2142 0.0561523 20.4305C0.83667 9.51765 9.51758 0.836555 20.4304 0.0560532C21.2144 0 22.1428 0 24 0Z" clip-rule="evenodd" fill="url(#paint_angular_92_156_0)" fill-opacity="1.000000" fill-rule="evenodd"/>
+</svg>

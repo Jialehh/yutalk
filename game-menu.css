@@ -1,0 +1,121 @@
+:root {
+    --primary-color: #FF8FAB;
+    --secondary-color: #79D7D3;
+    --bg-gradient: linear-gradient(135deg, #FDE7EA, #E6F7F6);
+    --font-family: 'Poppins', 'Arial Rounded MT Bold', 'Arial', sans-serif;
+    --text-color: #333;
+    --card-bg: rgba(255, 255, 255, 0.8);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: var(--font-family);
+}
+
+body {
+    background: var(--bg-gradient);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    color: var(--text-color);
+}
+
+.menu-container {
+    width: 100%;
+    max-width: 600px;
+    padding: 40px;
+    text-align: center;
+    animation: fadeIn 1s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.title-card {
+    background: var(--card-bg);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 30px;
+    margin-bottom: 30px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.title-card h1 {
+    font-size: 48px;
+    font-weight: 700;
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 10px;
+}
+
+.title-card p {
+    font-size: 18px;
+    color: #666;
+}
+
+.user-info-card {
+    margin-bottom: 40px;
+}
+
+.welcome-message {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.welcome-message strong {
+    color: var(--primary-color);
+}
+
+.menu-options {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.menu-button {
+    display: inline-block;
+    padding: 15px 30px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: 600;
+    color: white;
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.menu-button:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    filter: brightness(1.1);
+}
+
+.menu-button.login-prompt {
+    background: linear-gradient(90deg, #fbc2eb, #a6c1ee);
+}
+
+.menu-button.back-to-chat {
+    background: transparent;
+    border: 2px solid var(--primary-color);
+    color: var(--primary-color);
+}
+
+.menu-button.back-to-chat:hover {
+    background: var(--primary-color);
+    color: white;
+}
+
+footer {
+    margin-top: 50px;
+    font-size: 14px;
+    color: #888;
+}

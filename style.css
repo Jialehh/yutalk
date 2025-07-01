@@ -1,0 +1,1161 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    height: 100%;
+    width: 100%; 
+    overflow: hidden;
+    background-color: #eef2f5; 
+}
+
+.app-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%; 
+    height: 100%; 
+    background-color: #ffffff;
+    overflow: hidden; 
+}
+
+header {
+    background-color: #58AFFF; 
+    color: white;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    height: 60px;
+    box-sizing: border-box;
+}
+
+.logo-img {
+    height: 30px; 
+    width: auto; 
+    margin-right: 10px;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.main-content {
+    display: flex;
+    flex-grow: 1;
+    overflow: hidden; 
+}
+
+.sidebar {
+    width: 70px;
+    background-color: #4A4A6A; 
+    padding-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.nav-button {
+    background: none;
+    border: none;
+    padding: 15px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    border-radius: 8px;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.3s ease, transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1), box-shadow 0.3s ease; 
+}
+
+.nav-button img {
+    width: 28px; 
+    height: 28px;
+}
+
+.nav-button.active {
+    background-color: rgba(255, 255, 255, 0.2); 
+    transform: scale(1.1); 
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.nav-button:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+    transform: scale(1.15);
+    box-shadow: 0 6px 20px rgba(88, 175, 255, 0.25), 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.chat-area {
+    flex-grow: 1;
+    display: flex;
+    background-color: #EFF2F5; 
+}
+
+.chat-list-panel {
+    width: 300px;
+    border-right: 1px solid #e0e0e0;
+    display: flex;
+    flex-direction: column;
+    background-color: #EFF2F5; 
+}
+
+.search-add-bar {
+    padding: 12px 15px; 
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #e0e0e0;
+    background-color: #FFFFFF; 
+    min-height: 30px; 
+}
+
+.search-input-container {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    background-color: #f0f0f0; 
+    border-radius: 18px; 
+    padding: 8px 12px;
+    margin-right: 10px;
+}
+
+.search-input-container .search-icon {
+    width: 16px;
+    height: 16px;
+    margin-right: 8px;
+    opacity: 0.7;
+}
+
+#searchInput {
+    border: none;
+    outline: none;
+    background: transparent;
+    flex-grow: 1;
+    font-size: 14px;
+}
+
+.add-button {
+    background-color: #f0f0f0; 
+    border: none;
+    border-radius: 6px; 
+    padding: 8px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 36px;
+    height: 36px;
+    transition: background-color 0.3s ease, transform 0.2s ease; 
+}
+
+.add-button img {
+    width: 20px;
+    height: 20px;
+}
+
+.add-button:hover {
+    background-color: #dde1e6;
+    transform: scale(1.12);
+    box-shadow: 0 5px 18px rgba(88, 175, 255, 0.2), 0 2px 7px rgba(0,0,0,0.12);
+}
+
+.add-button:active { 
+    transform: scale(0.95);
+    background-color: #d0d0d0; 
+}
+
+.chat-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    overflow-y: auto;
+    flex-grow: 1;
+}
+
+.chat-list-item {
+    display: flex;
+    align-items: center;
+    padding: 10px 12px; 
+    cursor: pointer;
+    background-color: #FFFFFF; 
+    border-radius: 6px;       
+    margin: 8px 12px;         
+    transition: background-color 0.25s ease-in-out, transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease-in-out; 
+}
+
+.chat-list-item:hover {
+    background-color: #f0f4ff;
+    transform: translateX(5px) scale(1.02);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+}
+
+.chat-list-item.active {
+    background-color: #e0eaff; 
+    transform: translateX(0px) scale(1.01);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+}
+
+.chat-list-item.pinned.active {
+    background-color: #ddeafd; /* Slightly different for active pinned chat */
+}
+
+.chat-list-item .avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: white;
+    font-size: 18px;
+    background-color: #ccc; /* Default, will be overridden by JS */
+}
+
+.chat-list-item .chat-name {
+    font-weight: 500;
+    color: #333;
+    flex-grow: 1;
+}
+
+.chat-list-item .unread-badge {
+    background-color: #FF3B30;
+    color: white;
+    padding: 2px 7px;
+    border-radius: 10px;
+    font-size: 0.75em;
+    margin-left: auto; /* Pushes to the right */
+    font-weight: bold;
+}
+
+.chat-list-item .pin-icon {
+    margin-left: 8px;
+    width: 16px;
+    height: 16px;
+    /* Add SVG or font icon for pin */
+    background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23888"><path d="M16 9V4l1 0c0.55 0 1-0.45 1-1s-0.45-1-1-1H7C6.45 2 6 2.45 6 3s0.45 1 1 1l1 0v5c0 1.66-1.34 3-3 3v2h5.97v7l1 1 1-1v-7H19v-2c-1.66 0-3-1.34-3-3z"/></svg>');
+    background-repeat: no-repeat;
+    background-size: contain;
+    opacity: 0.6;
+}
+
+.avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #78AFFF; 
+    margin-right: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+    text-transform: uppercase; 
+}
+
+.chat-name {
+    font-size: 15px;
+    font-weight: 500;
+    color: #333;
+}
+
+.message-display-area {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: #EFF2F5; 
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    transition: background-image 0.5s ease-in-out; 
+}
+
+.chat-header-bar {
+    padding: 15px 20px;
+    border-bottom: 1px solid #e0e0e0;
+    background-color: #FFFFFF; 
+    font-size: 16px;
+    font-weight: bold;
+    min-height: 30px; 
+    display: flex;
+    align-items: center;
+}
+
+.messages {
+    flex-grow: 1;
+    padding: 20px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.placeholder-text {
+    margin: auto;
+    color: #888;
+    font-size: 16px;
+    text-align: center;
+}
+
+/* 聊天气泡样式 */
+.message {
+    padding: 10px 15px;
+    margin-bottom: 10px;
+    border-radius: 18px;
+    max-width: 70%;
+    word-wrap: break-word;
+    display: flex;
+    flex-direction: column;
+    position: relative; /* For pseudo-elements if needed for tails */
+}
+
+.message.received-ai-message {
+    background-color: #E1F5FE; /* Light blue for AI messages */
+    align-self: flex-start;
+    border-bottom-left-radius: 4px;
+}
+
+.message.received-ai-message .sender-name {
+    color: #0277BD; /* Darker blue for AI sender name */
+    font-weight: bold;
+}
+
+.message.system {
+    align-self: center;
+    background-color: #f0f0f0;
+    color: #555;
+    font-size: 0.85em;
+    padding: 6px 12px;
+    border-radius: 10px;
+    max-width: 80%;
+    text-align: center;
+    margin-top: 5px;
+    margin-bottom: 15px;
+}
+
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Default Bubble Styles */
+.message.sent {
+    background-color: #58AFFF; 
+    color: white;
+    align-self: flex-end;
+    border-radius: 18px 18px 5px 18px; /* Asymmetric for tail illusion */
+}
+
+.message.received {
+    background-color: #e9e9eb; 
+    color: #333;
+    align-self: flex-start;
+    border-radius: 18px 18px 18px 5px; /* Asymmetric for tail illusion */
+}
+.message.received-ai-message {
+    background-color: #d1e7dd; /* A slightly different default for AI */
+    color: #0f5132;
+    align-self: flex-start;
+    border-radius: 18px 18px 18px 5px;
+}
+
+.message.system { /* System messages, distinct styling */
+    align-self: center;
+    background-color: #f0f0f0;
+    color: #555;
+    font-size: 12px;
+    padding: 5px 10px;
+    border-radius: 10px;
+    max-width: 80%;
+    text-align: center;
+}
+
+
+/* Cute Bubble Style */
+.message.sent.bubble-cute {
+    background-color: #FFC0CB; /* Light Pink */
+    color: #7B1FA2; /* Darker Purple text */
+    border-radius: 25px 25px 8px 25px; /* More rounded, with asymmetry */
+}
+
+.message.received.bubble-cute,
+.message.received-ai-message.bubble-cute {
+    background-color: #ADD8E6; /* Light Blue */
+    color: #333;
+    border-radius: 25px 25px 25px 8px; /* More rounded, with asymmetry */
+}
+
+/* Premium Bubble Style */
+.message.sent.bubble-premium {
+    background: linear-gradient(135deg, #6A82FB 0%, #FC5C7D 100%); /* More vibrant gradient */
+    color: white;
+    border-radius: 15px 15px 4px 15px; /* Sharper, modern look */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    padding: 12px 18px; /* Slightly more padding */
+}
+
+.message.received.bubble-premium,
+.message.received-ai-message.bubble-premium {
+    background-color: #FFFFFF; 
+    color: #2c3e50; 
+    border: 1px solid #E0E0E0;
+    border-radius: 15px 15px 15px 4px; /* Sharper, modern look */
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    padding: 12px 18px;
+}
+
+
+.message .message-image {
+    max-width: 100%; /* Ensure image fits within bubble */
+    max-height: 250px; /* Limit image height */
+    display: block;
+    border-radius: 8px; /* Rounded corners for the image itself */
+    margin-top: 5px; /* Space if there's text above (not typical for image-only messages) */
+    margin-bottom: 5px; /* Space if there's a caption below */
+}
+
+/* Styling for images within different bubble themes */
+.message.bubble-cute .message-image {
+    border: 2px solid rgba(255,255,255,0.7);
+    padding: 2px;
+}
+.message.bubble-premium .message-image {
+    box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+}
+
+.message-image-caption {
+    font-size: 0.85em;
+    opacity: 0.9;
+    margin-top: 4px;
+    display: block;
+    line-height: 1.3;
+}
+/* Caption color adjustments for sent messages with light text */
+.message.sent.bubble-premium .message-image-caption,
+.message.sent.bubble-default .message-image-caption { /* Assuming default sent has light text */
+    color: white;
+}
+.message.sent.bubble-cute .message-image-caption { /* Cute sent might have darker text */
+    color: #7B1FA2; 
+}
+
+
+/* Updated styles for message input area and its contents */
+.message-input-area {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    background-color: #FFFFFF;
+    border-radius: 25px; /* Highly rounded like a pill for the whole bar */
+    margin: 10px 15px; /* Margin to make it "float" at the bottom */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.attach-image-btn {
+    background: none;
+    border: none;
+    padding: 5px; 
+    margin-right: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.attach-image-btn img {
+    width: 24px; 
+    height: 24px;
+}
+
+.message-input-area .emoji-btn {
+        background: none;
+        border: none;
+        padding: 8px;
+        cursor: pointer;
+        margin-right: 5px; /* Add some space between emoji and image attach button */
+    }
+
+    .message-input-area .emoji-btn img {
+        width: 24px;
+        height: 24px;
+        opacity: 0.7;
+    }
+
+    .message-input-area .emoji-btn:hover img {
+        opacity: 1;
+    }
+
+    .emoji-picker {
+        position: absolute;
+        bottom: 60px; /* Adjust as needed based on input area height */
+        left: 50px; /* Adjust to align with the emoji button or input field */
+        background-color: white;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        padding: 10px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        display: flex; /* For layout of emojis */
+        flex-wrap: wrap; /* Allow emojis to wrap */
+        gap: 8px; /* Space between emojis */
+        z-index: 1001; /* Ensure it's above other elements */
+        max-width: 250px; /* Limit width */
+    }
+
+    .emoji-picker img {
+        width: 32px; /* Size of individual emojis */
+        height: 32px;
+        cursor: pointer;
+        transition: transform 0.2s ease;
+    }
+
+    .emoji-picker img:hover {
+        transform: scale(1.2);
+    }
+
+.message-emoji-img {
+    max-width: 60px; 
+    max-height: 60px;
+    display: block; 
+}
+
+.message-pure-emoji {
+    width: auto; /* Let the image decide its width */
+    height: 80px; /* Fixed height for pure emojis */
+    max-width: none; /* Override max-width from .message-image if it gets applied */
+    display: block;
+    margin: 5px 0; /* Add some margin if needed */
+    background: none !important; /* Ensure no background from parent .message */
+    padding: 0 !important; /* Ensure no padding from parent .message */
+    border-radius: 0 !important; /* Ensure no border-radius from parent .message */
+    box-shadow: none !important; /* Ensure no shadow from parent .message */
+}
+
+.message.sent .message-pure-emoji,
+.message.received .message-pure-emoji {
+    align-self: initial; /* Reset align-self for the image itself if parent has flex */
+}
+
+/* Ensure the container for pure emoji has no bubble styling */
+.message.sent.bubble-cute > .message-pure-emoji,
+.message.sent.bubble-premium > .message-pure-emoji,
+.message.received.bubble-cute > .message-pure-emoji,
+.message.received.bubble-premium > .message-pure-emoji {
+    background: none !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+}
+
+/* Specific styling for the div containing a pure emoji to remove bubble appearance */
+.message > .message-pure-emoji {
+    /* This rule might be too general, better to apply to the .message div itself when it contains ONLY a pure emoji */
+    /* The JS logic should add a class like 'contains-pure-emoji' to the .message div */
+}
+
+.message.contains-pure-emoji {
+    background: transparent !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    max-width: fit-content; /* Adjust width to content */
+}
+
+    /* Styles for directly sent emojis (no bubble) */
+    .message-pure-emoji {
+        max-width: 80px; /* Adjust size as needed */
+        max-height: 80px; /* Adjust size as needed */
+        display: block; /* Or inline-block */
+        /* No background, border, or padding by default from .message should apply here due to JS override */
+        /* Ensure it aligns correctly if not handled by parent's align-self in JS */
+        /* margin-bottom: 10px; /* Same as .message for consistency if needed */
+        /* The fadeInUp animation from .message will still apply */
+    }
+
+    #messageInput {
+    flex-grow: 1;
+    border: none; 
+    outline: none;
+    background: transparent; 
+    padding: 10px 5px; 
+    font-size: 15px; 
+    color: #333;
+}
+
+#sendMessageButton {
+    background-color: #007AFF; 
+    color: white;
+    border: none;
+    border-radius: 18px; 
+    padding: 8px 18px; 
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold; 
+    transition: background-color 0.3s ease, transform 0.15s ease;
+    margin-left: 8px; 
+}
+
+#sendMessageButton:hover {
+    background-color: #005ecb;
+    transform: scale(1.05);
+    box-shadow: 0 4px 16px rgba(0, 122, 255, 0.16), 0 1.5px 6px rgba(0,0,0,0.10);
+}
+
+#sendMessageButton:active {
+    transform: scale(0.98);
+    background-color: #004a9e; 
+}
+
+/* Group Announcement Styles */
+#groupAnnouncementContainer {
+    display: flex; /* Initially managed by JS */
+    align-items: center;
+    margin-left: auto; /* Pushes to the right */
+    padding-right: 15px; /* Some spacing from the edge */
+}
+
+#groupAnnouncementText {
+    font-size: 0.85em;
+    color: #4A4A6A; /* Darker, more subtle color */
+    margin-right: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 200px; /* Adjust as needed */
+}
+
+.edit-announcement-btn {
+    background-color: #e0e7ef;
+    color: #333;
+    border: none;
+    border-radius: 5px;
+    padding: 4px 8px;
+    font-size: 0.8em;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.edit-announcement-btn:hover {
+    background-color: #d1dae5;
+}
+
+.edit-announcement-btn:active {
+    background-color: #c2cddb;
+}
+
+/* Chat Header Button (for Chat Settings) */
+.chat-header-button {
+    background: none;
+    border: none;
+    padding: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    transition: background-color 0.2s ease;
+}
+
+.chat-header-button:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.chat-header-button img {
+    opacity: 0.7;
+}
+
+/* Chat Settings Modal */
+.chat-settings-modal {
+    position: absolute;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    padding: 8px 0;
+    z-index: 1000;
+    min-width: 150px;
+    opacity: 0;
+    transform: scale(0.95) translateY(-10px);
+    transform-origin: top right; /* Animation origin */
+    transition: opacity 0.2s ease-out, transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    pointer-events: none; /* Prevent interaction when hidden */
+}
+
+.chat-settings-modal.visible {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    pointer-events: auto;
+}
+
+.chat-settings-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.chat-settings-menu li {
+    padding: 10px 15px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #333;
+}
+
+.chat-settings-menu li:hover {
+    background-color: #f5f5f5;
+}
+
+/* Context Menu for Chat List */
+.context-menu {
+    position: absolute;
+    background-color: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    padding: 5px 0;
+    z-index: 1001; /* Ensure it's above other elements */
+    min-width: 160px;
+}
+
+.context-menu-items {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.context-menu-items li {
+    padding: 8px 12px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #333;
+}
+
+.context-menu-items li:hover {
+    background-color: #f0f0f0;
+}
+
+/* Pinned Chat Indicator */
+.chat-list-item.pinned {
+    /* background-color: #fffbe6; /* Light yellow to indicate pinned */
+    /* border-left: 3px solid #ffd700; /* Gold border */
+}
+
+.chat-list-item .pin-icon {
+    width: 16px;
+    height: 16px;
+    margin-left: auto; /* Pushes icon to the right */
+    opacity: 0.6;
+    background-image: url('pin-icon.svg'); /* You'll need a pin icon SVG */
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+
+/* Settings Panel Styles */
+.settings-panel {
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 6px 32px rgba(88,175,255,0.10), 0 2px 8px rgba(0,0,0,0.08);
+    padding: 32px 28px 28px 28px;
+    max-width: 340px;
+    margin: 36px auto 0 auto;
+    display: none; /* Default to hidden */
+    flex-direction: column;
+    gap: 18px;
+    font-size: 15px;
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+    pointer-events: none;
+    transition: opacity 0.3s ease-out, transform 0.3s ease-out, display 0s 0.3s; /* Delay display change */
+}
+
+.settings-panel.visible {
+    display: flex;
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+    transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+    color: #333;
+    border: 1.5px solid #e0e7ef;
+    /* transition: box-shadow 0.3s, border 0.3s; */ /* Replaced by new transition */
+    transform: translateX(100%);
+    opacity: 0;
+    transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.3s ease-out, box-shadow 0.3s, border 0.3s;
+}
+
+.settings-panel.visible {
+    transform: translateX(0);
+    opacity: 1;
+}
+.settings-panel h3 {
+    margin: 0 0 10px 0;
+    font-size: 17px;
+    color: #58AFFF;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+.settings-panel label {
+    margin-bottom: 6px;
+    font-size: 15px;
+    color: #4A4A6A;
+    /* Ensure other styles like settings-header, settings-item are within .settings-panel */
+}
+#backgroundImageInput {
+    margin-bottom: 10px;
+    border: none;
+    background: #f7fafd;
+    border-radius: 8px;
+    padding: 7px 10px;
+    font-size: 14px;
+    color: #333;
+    box-shadow: 0 1px 4px rgba(88,175,255,0.07);
+}
+#resetBackgroundButton {
+    background: linear-gradient(90deg, #58AFFF 0%, #7ed6ff 100%);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 18px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    margin-top: 4px;
+    box-shadow: 0 2px 8px rgba(88,175,255,0.10);
+    transition: background 0.2s, box-shadow 0.2s;
+}
+#resetBackgroundButton:hover {
+    background: linear-gradient(90deg, #7ed6ff 0%, #58AFFF 100%);
+    box-shadow: 0 4px 16px rgba(88,175,255,0.15);
+}
+#bubbleStyleSelect {
+    border: 1.5px solid #e0e7ef;
+    border-radius: 8px;
+    padding: 7px 12px;
+    font-size: 14px;
+    background: #f7fafd;
+    color: #333;
+    margin-bottom: 10px;
+    outline: none;
+    transition: border 0.2s;
+}
+#bubbleStyleSelect:focus {
+    border: 1.5px solid #58AFFF;
+}
+#closeSettingsButton {
+    background: #f0f4fa;
+    color: #58AFFF;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 18px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    margin-top: 10px;
+    box-shadow: 0 1px 4px rgba(88,175,255,0.07);
+    transition: background 0.2s, color 0.2s;
+}
+#closeSettingsButton:hover {
+    background: #eaf6ff;
+    color: #2d8cff;
+}
+.settings-panel button {
+    padding: 10px 18px;
+    background-color: #58AFFF;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.15s ease;
+    font-size: 14px;
+    margin-right: 10px; /* Spacing between buttons if multiple on one line */
+    /* margin-top: 10px; */ /* Already there, but ensure it is applied */
+}
+.settings-panel button:last-of-type {
+    margin-right: 0;
+}
+
+
+.settings-panel button:hover {
+    background-color: #409ae0;
+    transform: scale(1.02);
+}
+
+.settings-panel button:active {
+    transform: scale(0.98);
+    background-color: #358cd6;
+}
+
+.user-info {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    color: white;
+}
+
+/* 主题切换按钮样式 */
+.theme-toggle {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+    border: none;
+    border-radius: 20px;
+    padding: 8px 16px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-left: 10px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.theme-toggle:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+    transform: scale(1.05);
+}
+
+.theme-toggle:active {
+    transform: scale(0.95);
+}
+
+.message {
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 10px;
+    max-width: 70%;
+}
+
+.message.sent {
+    background: #007bff;
+    color: white;
+    margin-left: auto;
+    text-align: right;
+}
+
+.message.received {
+    background: #f1f1f1;
+    color: #333;
+    margin-right: auto;
+}
+
+.message-header {
+    font-size: 0.8em;
+    margin-bottom: 5px;
+    opacity: 0.7;
+}
+
+.sender-name {
+    font-weight: bold;
+}
+
+.message-time {
+    margin-left: 10px;
+}
+
+.message-text {
+    font-size: 1em;
+}
+
+#messagesContainer {
+    /* height: 400px; */ /* This was in the inline style, but messages container in existing CSS already has flex-grow: 1 */
+    /* overflow-y: auto; */ /* Already defined in .messages */
+    /* padding: 20px; */ /* Already defined in .messages */
+    /* display: flex; */ /* Already defined in .messages */
+    /* flex-direction: column; */ /* Already defined in .messages */
+}
+
+.spinner {
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    border-top: 4px solid #3498db;
+    width: 30px;
+    height: 30px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 10px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+/* 在文件末尾添加以下样式 */
+
+/* 用户头像样式 */
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+    border: 2px solid white;
+}
+
+.default-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #58AFFF;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 18px;
+    margin-right: 10px;
+}
+
+.avatar-container {
+    display: flex;
+    align-items: center;
+}
+
+/* 个人资料页面样式 */
+.profile-container {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 20px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.avatar-section {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.avatar-preview {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    margin: 0 auto 20px;
+    overflow: hidden;
+    position: relative;
+    background-color: #f0f0f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 60px;
+    color: #58AFFF;
+}
+
+.avatar-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.upload-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #58AFFF;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.upload-btn:hover {
+    background-color: #409ae0;
+}
+
+.upload-btn input[type="file"] {
+    display: none;
+}
+
+.user-info-section {
+    padding: 20px;
+    border-top: 1px solid #eee;
+}
+
+.info-item {
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #f5f5f5;
+}
+
+.info-label {
+    font-weight: bold;
+    color: #555;
+    margin-bottom: 5px;
+}
+
+.info-value {
+    font-size: 16px;
+}
+
+.message {
+    padding: 10px;
+    margin: 15px 0;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+.header-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    margin-right: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 16px;
+    background-color: #58AFFF;
+    color: white;
+    object-fit: cover;
+}
+
+/* 聊天气泡旁的头像样式 */
+.message-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    margin-right: 10px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 16px;
+    background-color: #58AFFF;
+    color: white;
+    object-fit: cover;
+}
+
+/* 消息容器样式 */
+.message-container {
+    display: flex;
+    margin-bottom: 15px;
+    align-items: flex-start;
+}
+
+/* 接收消息时，头像在左边 */
+.message-container.received {
+    flex-direction: row;
+}
+
+/* 发送消息时，头像在右边 */
+.message-container.sent {
+    flex-direction: row-reverse;
+}
+
+/* 消息内容区域 */
+.message-content-container {
+    display: flex;
+    flex-direction: column;
+    max-width: calc(100% - 40px);
+}

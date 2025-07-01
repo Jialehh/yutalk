@@ -1,0 +1,74 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f0f2f5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.lobby-container {
+    background: white;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 90%;
+    max-width: 500px;
+}
+
+h1 {
+    color: #333;
+    margin-bottom: 10px;
+}
+
+p {
+    color: #666;
+    font-size: 1.1em;
+}
+
+#matchmaking-status p {
+    font-style: italic;
+    margin: 20px 0;
+    padding: 15px;
+    border-radius: 8px;
+    background-color: #e9ecef;
+}
+
+#matchmaking-status .searching {
+    color: #007bff;
+}
+
+#matchmaking-status .matched {
+    color: #28a745;
+    font-weight: bold;
+}
+
+button, a {
+    display: inline-block;
+    text-decoration: none;
+    color: white;
+    background-color: #007bff;
+    padding: 15px 30px;
+    border-radius: 8px;
+    border: none;
+    font-size: 1.2em;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    margin-top: 20px;
+}
+
+button:hover, a:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+}
+
+a {
+    background-color: #6c757d;
+    margin-left: 10px;
+}
+
+a:hover {
+    background-color: #5a6268;
+}
